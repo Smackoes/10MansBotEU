@@ -1,6 +1,6 @@
 #10 Mans Bot EU by Smackoes
-#09/05/2019
-#Version 2.00 Released
+#15/01/2019
+#Version 4.00 Released
 
 import discord
 from discord.ext import commands
@@ -11,7 +11,7 @@ import os
 """GAME DISPLAYED"""
 
 #GameStatus = "Down for Maintenance"
-GameStatus = "!commands for help | S"
+GameStatus = "!commands for help | S4"
 
 
 """---------------------CODE-----------------------"""
@@ -59,7 +59,7 @@ def EnquiryGE(queuege):
         return 1
 
 def queuegeComplete(queuege): 
-    if len(queuege) == 10: 
+    if len(queuege) == 5: 
         return 1
     else: 
         return 0
@@ -72,7 +72,7 @@ def EnquiryUS(queueus):
         return 1
 
 def queueusComplete(queueus): 
-    if len(queueus) == 10: 
+    if len(queueus) == 5: 
         return 1
     else: 
         return 0
@@ -85,7 +85,7 @@ def EnquirySU(queuesu):
         return 1
 
 def queuesuComplete(queuesu): 
-    if len(queuesu) == 10: 
+    if len(queuesu) == 5: 
         return 1
     else: 
         return 0
@@ -94,11 +94,33 @@ def queuesuComplete(queuesu):
 @bot.event
 async def on_message(message):
 
+    """DEFINE"""
+
+    gecount = str(len(queuege))
+    uscount = str(len(queueus))
+    sucount = str(len(queuesu))
+
     """COMMANDS"""
 
     if message.content.lower().startswith('!commands'):
         await bot.send_message(message.channel, "fc = us/ge/su\n\n!q fc - To Queue for a faction\n!remove fc - To remove yourself from the Queue\n!status - To check the Queues\n!clear fc - To clear a factions Queue (Admin)\n!clear all- To clear all Queues (Admin)")
 
+    """CORRECTIONS"""
+
+    if message.content.lower().startswith('!q fc'):
+        await bot.send_message(message.channel, "fc = ge, us or su")
+
+    if message.content.lower().startswith('!remove fc'):
+        await bot.send_message(message.channel, "fc (faction) = ge, us or su")
+
+    if message.content.lower().startswith('!qe'):
+        await bot.send_message(message.channel, "Use !q ge, us or su")
+
+    if message.content.lower().startswith('!leave'):
+        await bot.send_message(message.channel, "Use !remove ge, us or su")
+
+    if message.content.lower().startswith('?join'):
+        await bot.send_message(message.channel, "Use ?rank ge, us or su")
 
     """QUEUES"""
     """GE QUEUE"""
@@ -127,11 +149,11 @@ async def on_message(message):
                 await bot.send_message(message.channel, "Full German queue!")
                 """Check US and SU Queue"""
                 if len(queuege) <= len(queueus):
-                    await bot.send_message(message.channel, "Battle Ready | GE: " + separator.join([user.mention for user in queuege]) + " US: " + separator.join([user.mention for user in queueus]) + "\nPlease join the 'Decide the city' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
+                    await bot.send_message(message.channel, "Battle Ready!\n" + gecount + " GE: " + separator.join([user.mention for user in queuege]) + "\n" + uscount + " US: " + separator.join([user.mention for user in queueus]) + "\nPlease join the 'Decide the City' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
                     await bot.send_message(message.channel, embed=ge)
                     await bot.send_message(message.channel, embed=us)
                 if len(queuege) <= len(queuesu):
-                    await bot.send_message(message.channel, "Battle Ready | GE: " + separator.join([user.mention for user in queuege]) + " SU: " + separator.join([user.mention for user in queuesu]) + "\nPlease join the 'Decide the city' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
+                    await bot.send_message(message.channel, "Battle Ready!\n" + gecount + " GE: " + separator.join([user.mention for user in queuege]) + "\n" + sucount + " SU: " + separator.join([user.mention for user in queuesu]) + "\nPlease join the 'Decide the City' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
                     await bot.send_message(message.channel, embed=ge)
                     await bot.send_message(message.channel, embed=su)
 
@@ -167,14 +189,14 @@ async def on_message(message):
 
             if queueusComplete(queueus):
                 separator = ", "
-                await bot.send_message(message.channel, "Full US queue! " + separator.join([user.mention for user in queueus]))
+                await bot.send_message(message.channel, "Full US queue!")
                 """Check GE and SU Queue"""
                 if len(queueus) <= len(queuege):
-                    await bot.send_message(message.channel, "Battle Ready | US: " + separator.join([user.mention for user in queueus]) + " GE: " + separator.join([user.mention for user in queuege]) + "\nPlease join the 'Decide the city' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
+                    await bot.send_message(message.channel, "Battle Ready!\n" + uscount + " US: " + separator.join([user.mention for user in queueus]) + "\n" + gecount + " GE: " + separator.join([user.mention for user in queuege]) + "\nPlease join the 'Decide the City' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
                     await bot.send_message(message.channel, embed=us)
                     await bot.send_message(message.channel, embed=ge)
                 if len(queueus) <= len(queuesu):
-                    await bot.send_message(message.channel, "Battle Ready | US: " + separator.join([user.mention for user in queueus]) + " SU: " + separator.join([user.mention for user in queuesu]) + "\nPlease join the 'Decide the city' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
+                    await bot.send_message(message.channel, "Battle Ready!\n" + uscount + " US: " + separator.join([user.mention for user in queueus]) + "\n" + sucount + " SU: " + separator.join([user.mention for user in queuesu]) + "\nPlease join the 'Decide the City' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
                     await bot.send_message(message.channel, embed=us)
                     await bot.send_message(message.channel, embed=su)
 
@@ -209,14 +231,14 @@ async def on_message(message):
 
             if queuesuComplete(queuesu):
                 separator = ", "
-                await bot.send_message(message.channel, "Full SU queue! " + separator.join([user.mention for user in queuesu]))
+                await bot.send_message(message.channel, "Full SU queue!")
                 """Check GE and SU Queue"""
                 if len(queuesu) <= len(queuege):
-                    await bot.send_message(message.channel, "Battle Ready | SU: " + separator.join([user.mention for user in queuesu]) + " GE: " + separator.join([user.mention for user in queuege]) + "\nPlease join the 'Decide the city' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
+                    await bot.send_message(message.channel, "Battle Ready!\n" + sucount + " SU: " + separator.join([user.mention for user in queuesu]) + "\n" + gecount + " GE: " + separator.join([user.mention for user in queuege]) + "\nPlease join the 'Decide the City' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
                     await bot.send_message(message.channel, embed=su)
                     await bot.send_message(message.channel, embed=ge)
                 if len(queuesu) <= len(queueus):
-                    await bot.send_message(message.channel, "Battle Ready | SU: " + separator.join([user.mention for user in queuesu]) + " US: " + separator.join([user.mention for user in queueus]) + "\nPlease join the 'Decide the city' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
+                    await bot.send_message(message.channel, "Battle Ready!\n" + sucount + " SU: " + separator.join([user.mention for user in queuesu]) + "\n" + uscount + " US: " + separator.join([user.mention for user in queueus]) + "\nPlease join the 'Decide the City' voice room to get your battle going! Once all 5 members from each faction join you are ready to pop a war battle!")
                     await bot.send_message(message.channel, embed=su)
                     await bot.send_message(message.channel, embed=us)
 
@@ -231,25 +253,49 @@ async def on_message(message):
     """STATUS"""
     
     if message.content.lower().startswith('!status'):
-        gecount = str(len(queuege))
-        uscount = str(len(queueus))
-        sucount = str(len(queuesu))
+        separator = ", "
+        #await bot.send_message(message.channel, gecount + " Queued for Germany | " + separator.join([user.mention for user in queuege]) + "\n" + uscount + " Queued for United States | " + separator.join([user.mention for user in queueus]) + "\n" + sucount + " Queued for Soviet Union | " + separator.join([user.mention for user in queuesu]))
+        #await bot.send_message(message.channel, uscount + " Queued for United States: " + separator.join([str(user) for user in queueus]))
+        #await bot.send_message(message.channel, sucount + " Queued for Soviet Union: " + separator.join([str(user) for user in queuesu]))
+        """
         if EnquiryGE(queuege):
             separator = ", "
-            await bot.send_message(message.channel, gecount + " Queued for Germany: " + separator.join([user.mention for user in queuege]))
-            #await bot.send_message(message.channel, gecount + " Queued for Germany: " + separator.join([str(user) for user in queuege])) 
+            await bot.send_message(message.channel, gecount + " Queued for Germany: " + separator.join([str(user) for user in queuege]))
+            #await bot.send_message(message.channel, gecount + " Queued for Germany: " + separator.join([user.mention for user in queuege])) 
         else: 
             await bot.send_message(message.channel, "No one queued for Germany")
         if EnquiryUS(queueus):
             separator = ", "
-            await bot.send_message(message.channel, uscount + " Queued for United States: " + separator.join([user.mention for user in queueus]))
+            await bot.send_message(message.channel, uscount + " Queued for United States: " + separator.join([str(user) for user in queueus]))
         else: 
             await bot.send_message(message.channel, "No one queued for United States")
         if EnquirySU(queuesu):
             separator = ", "
-            await bot.send_message(message.channel, sucount + " Queued for Soviet Union: " + separator.join([user.mention for user in queuesu]))
+            await bot.send_message(message.channel, sucount + " Queued for Soviet Union: " + separator.join([str(user) for user in queuesu]))
         else: 
             await bot.send_message(message.channel, "No one queued for Soviet Union")
+        """
+        
+        """STATUS EMBED"""
+        user = message.author
+        #if message.content.lower().startswith('!status'):
+        embedstatus = discord.Embed(title="Status", colour=0x0000FF)
+        if len(queuege) == 0:
+            embedstatus.add_field(name=str(gecount) + " Queued for Germany", value="No one", inline=True)
+        else:
+            embedstatus.add_field(name=str(gecount) + " Queued for Germany", value=(separator.join([user.mention for user in queuege])), inline=True)
+
+        if len(queueus) == 0:
+            embedstatus.add_field(name=str(uscount) + " Queued for United States", value="No one", inline=False)
+        else:
+            embedstatus.add_field(name=str(uscount) + " Queued for United States", value=(separator.join([user.mention for user in queueus])), inline=False)
+        
+        if len(queuesu) == 0:
+            embedstatus.add_field(name=str(sucount) + " Queued for Soviet Union", value="No one", inline=False)
+        else:
+            embedstatus.add_field(name=str(sucount) + " Queued for Soviet Union", value=(separator.join([user.mention for user in queuesu])), inline=False)
+        
+        await bot.send_message(message.channel, embed=embedstatus)
 
     """CLEARING"""
 
@@ -311,4 +357,4 @@ async def on_message(message):
 
 #Goes at bottom
 """DO NOT TOUCH"""
-bot.run("NTc1OTYyMzczMjQwNjUxNzc3.XNPoGg.klHKWhdGnk2IyVwgL7FSUqBtGTQ")
+bot.run("NTc1OTYyMzczMjQwNjUxNzc3.XNPrZQ.mYm51RKRdUT-OYRKK3uiuQqEMYY")
